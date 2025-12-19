@@ -12,13 +12,33 @@ class JurnalPage extends StatefulWidget {
 class _JurnalPageState extends State<JurnalPage> {
   final TextEditingController _dateController = TextEditingController();
 
+  bool _isSidebarVisible = false;
+
   @override
   void dispose() {
     _dateController.dispose();
     super.dispose();
   }
 
-  endDrawer() => const NavbarPage();
+  void _toggleSidebar() {
+    setState(() {
+      _isSidebarVisible = !_isSidebarVisible;
+    });
+  }
+
+  void _navigateToAndClose(String routeName) {
+    if (_isSidebarVisible) {
+      _toggleSidebar();
+    }
+    Navigator.pushReplacementNamed(context, routeName);
+  }
+
+  void _handleLogOut() {
+    if (_isSidebarVisible) {
+      _toggleSidebar();
+    }
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 
   void _showAddWorkDialog(BuildContext context) {
     showDialog(
@@ -463,83 +483,99 @@ class _JurnalPageState extends State<JurnalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      endDrawer: const NavbarPage(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              const SizedBox(height: 24),
-              Text(
-                'Jurnal Pembiasaan',
-                style: GoogleFonts.inter(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'DESEMBER - 2025',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Navigasi ke bulan sebelumnya'),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(context),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Jurnal Pembiasaan',
+                    style: GoogleFonts.inter(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1565C0),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
+                  const SizedBox(height: 4),
+                  Text(
+                    'DESEMBER - 2025',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                  elevation: 2,
-                ),
-                icon: const Icon(Icons.arrow_back, size: 18),
-                label: Text(
-                  'Bulan Sebelumnya',
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Navigasi ke bulan sebelumnya'),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1565C0),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      elevation: 2,
+                    ),
+                    icon: const Icon(Icons.arrow_back, size: 18),
+                    label: Text(
+                      'Bulan Sebelumnya',
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  _buildSectionTitle('A. Pembiasaan harian'),
+                  const SizedBox(height: 12),
+                  _buildLegend(),
+                  const SizedBox(height: 16),
+                  _buildCalendarGrid(),
+                  const SizedBox(height: 32),
+                  _buildSectionTitle('B. Pekerjaan yang dilakukan'),
+                  const SizedBox(height: 12),
+                  _buildWorkTable(context),
+                  const SizedBox(height: 32),
+                  _buildSectionTitle('C. Materi yang dipelajari'),
+                  const SizedBox(height: 12),
+                  _buildMaterialTable(context),
+                  const SizedBox(height: 12),
+                  _buildStatusLegend(),
+                  const SizedBox(height: 32),
+                  _buildSectionTitle('D. Poin'),
+                  const SizedBox(height: 12),
+                  _buildPointsTable(),
+                  const SizedBox(height: 40),
+                ],
               ),
-              const SizedBox(height: 32),
-              _buildSectionTitle('A. Pembiasaan harian'),
-              const SizedBox(height: 12),
-              _buildLegend(),
-              const SizedBox(height: 16),
-              _buildCalendarGrid(),
-              const SizedBox(height: 32),
-              _buildSectionTitle('B. Pekerjaan yang dilakukan'),
-              const SizedBox(height: 12),
-              _buildWorkTable(context),
-              const SizedBox(height: 32),
-              _buildSectionTitle('C. Materi yang dipelajari'),
-              const SizedBox(height: 12),
-              _buildMaterialTable(context),
-              const SizedBox(height: 12),
-              _buildStatusLegend(),
-              const SizedBox(height: 32),
-              _buildSectionTitle('D. Poin'),
-              const SizedBox(height: 12),
-              _buildPointsTable(),
-              const SizedBox(height: 40),
-            ],
+            ),
           ),
-        ),
+          if (_isSidebarVisible)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: _toggleSidebar,
+                child: Container(color: Colors.black.withOpacity(0.3)),
+              ),
+            ),
+          if (_isSidebarVisible)
+            NavbarPage(
+              onClose: _toggleSidebar,
+              onNavigate: _navigateToAndClose,
+              onLogOut: _handleLogOut,
+            ),
+        ],
       ),
     );
   }
@@ -557,45 +593,46 @@ class _JurnalPageState extends State<JurnalPage> {
           ),
         ),
         const Spacer(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              'Ahmad Syakarudin',
-              style: GoogleFonts.inter(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+        GestureDetector(
+          onTap: _toggleSidebar,
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Shapira Bunga Aulia',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'PPLG XII-5',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              'PPLG XII-5',
-              style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
-            ),
-          ],
-        ),
-        const SizedBox(width: 12),
-        Builder(
-          builder: (BuildContext context) {
-            return GestureDetector(
-              onTap: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-              child: Container(
+              const SizedBox(width: 12),
+              Container(
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   shape: BoxShape.circle,
                   image: const DecorationImage(
-                    image: AssetImage('assets/images/pp-dummy.jpg'),
+                    image: AssetImage('assets/images/pic1.jpeg'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-            );
-          }
+            ],
+          ),
         ),
       ],
     );

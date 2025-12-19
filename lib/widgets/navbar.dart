@@ -1,17 +1,18 @@
+// file: widgets/navbar.dart (Sudah Diperbaiki)
+
 import 'package:flutter/material.dart';
 
 class NavbarPage extends StatelessWidget {
-  const NavbarPage({super.key});
+  final VoidCallback onClose;
+  final Function(String) onNavigate;
+  final VoidCallback onLogOut;
 
-  void _navigateTo(BuildContext context, String routeName) {
-    Navigator.pop(context);
-    Navigator.pushReplacementNamed(context, routeName);
-  }
-
-  void _logOut(BuildContext context) {
-    Navigator.pop(context);
-    Navigator.pushReplacementNamed(context, '/login');
-  }
+  const NavbarPage({
+    super.key,
+    required this.onClose,
+    required this.onNavigate,
+    required this.onLogOut,
+  });
 
   Widget _buildMenuItem({
     required IconData icon,
@@ -36,69 +37,112 @@ class NavbarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          children: [
+    final double screenWidth = MediaQuery.of(context).size.width;
+    // Rasio diperbesar dari 0.4 menjadi 0.75 (75%) agar lebih mudah digunakan di ponsel.
+    const double navbarWidthRatio = 0.75;
 
-            _buildMenuItem(
-              icon: Icons.home_outlined,
-              title: 'Dashboard',
-              onTap: () => _navigateTo(context, '/'),
-            ),
-            _buildMenuItem(
-              icon: Icons.person_outline,
-              title: 'Profil',
-              onTap: () => _navigateTo(context, '/profile'),
-            ),
-            _buildMenuItem(
-              icon: Icons.explore_outlined,
-              title: 'Jelajahi',
-              onTap: () => _navigateTo(context, '/explore'),
-            ),
+    return Positioned(
+      top: 0,
+      right: 0,
+      width: screenWidth * navbarWidthRatio,
+      child: Material(
+        elevation: 8.0,
+        child: Container(
+          color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0, top: 4.0),
+                      child: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: onClose,
+                      ),
+                    ),
+                  ),
 
-            const Divider(height: 1, thickness: 0.5, indent: 16, endIndent: 16),
+                  // Menu Items
+                  _buildMenuItem(
+                    icon: Icons.home_outlined,
+                    title: 'Dashboard',
+                    onTap: () =>
+                        onNavigate('/dashboard'), // Mengarahkan ke /dashboard
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.person_outline,
+                    title: 'Profil',
+                    onTap: () => onNavigate('/profile'),
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.explore_outlined,
+                    title: 'Jelajahi (Direktori Siswa)',
+                    onTap: () => onNavigate(
+                      '/explore-private',
+                    ), // << PERBAIKAN: Mengarah ke rute privat
+                  ),
 
-            _buildMenuItem(
-              icon: Icons.book_outlined,
-              title: 'Jurnal Pembiasaan',
-              onTap: () => _navigateTo(context, '/jurnal'),
-            ),
-            _buildMenuItem(
-              icon: Icons.person_add_alt_outlined,
-              title: 'Permintaan Saksi',
-              onTap: () => _navigateTo(context, '/saksi'),
-            ),
-            _buildMenuItem(
-              icon: Icons.bar_chart,
-              title: 'Progress',
-              onTap: () => _navigateTo(context, '/progress'),
-            ),
-            _buildMenuItem(
-              icon: Icons.warning_amber_outlined,
-              title: 'Catatan Sikap',
-              onTap: () => _navigateTo(context, '/catatan-sikap'),
-            ),
+                  const Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
 
-            const Divider(height: 1, thickness: 0.5, indent: 16, endIndent: 16),
+                  _buildMenuItem(
+                    icon: Icons.book_outlined,
+                    title: 'Jurnal Pembiasaan',
+                    onTap: () => onNavigate('/jurnal'),
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.person_add_alt_outlined,
+                    title: 'Permintaan Saksi',
+                    onTap: () => onNavigate('/saksi'),
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.bar_chart,
+                    title: 'Progress',
+                    onTap: () => onNavigate('/progress'),
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.warning_amber_outlined,
+                    title: 'Catatan Sikap',
+                    onTap: () => onNavigate('/catatan-sikap'),
+                  ),
 
-            _buildMenuItem(
-              icon: Icons.menu_book_outlined,
-              title: 'Panduan Penggunaan',
-              onTap: () => _navigateTo(context, '/guide'),
+                  const Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    indent: 16,
+                    endIndent: 16,
+                  ),
+
+                  _buildMenuItem(
+                    icon: Icons.menu_book_outlined,
+                    title: 'Panduan Penggunaan',
+                    onTap: () => onNavigate('/guide'),
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.settings_outlined,
+                    title: 'Pengaturan Akun',
+                    onTap: () => onNavigate('/settings'),
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.logout,
+                    title: 'Log Out',
+                    onTap: onLogOut,
+                  ),
+                ],
+              ),
             ),
-            _buildMenuItem(
-              icon: Icons.settings_outlined,
-              title: 'Pengaturan Akun',
-              onTap: () => _navigateTo(context, '/settings'),
-            ),
-            _buildMenuItem(
-              icon: Icons.logout,
-              title: 'Log Out',
-              onTap: () => _logOut(context),
-            ),
-          ],
+          ),
         ),
       ),
     );

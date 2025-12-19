@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:slicing_jurnalku/explore1.dart';
 import 'package:slicing_jurnalku/login.dart';
-import 'package:slicing_jurnalku/widgets/navbar.dart' show NavbarPage;
+import 'package:slicing_jurnalku/explore_page.dart';
 
 void main() {
-  runApp(const ExplorePage());
+  runApp(const ExplorePage1());
 }
 
-class ExplorePage extends StatelessWidget {
-  const ExplorePage({super.key});
+class ExplorePage1 extends StatelessWidget {
+  const ExplorePage1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,6 @@ class ExplorePage extends StatelessWidget {
   }
 }
 
-// --- Data Model ---
 class Student {
   final String name;
   final String nis;
@@ -56,13 +54,10 @@ class DirectoryPage extends StatefulWidget {
   State<DirectoryPage> createState() => _DirectoryPageState();
 }
 
-
 class _DirectoryPageState extends State<DirectoryPage> {
   final int _itemsPerPage = 5;
   int _currentPage = 1;
   final TextEditingController _searchController = TextEditingController();
-
-  endDrawer() => const NavbarPage();
 
   bool _isFilterExpanded = false;
   String? _selectedRombel;
@@ -148,12 +143,9 @@ class _DirectoryPageState extends State<DirectoryPage> {
                     ),
                   ),
                 ),
-
-                // 2. Konten Header & Card
                 Column(
                   children: [
                     const SizedBox(height: 30),
-                    // Judul Header
                     Center(
                       child: Column(
                         children: [
@@ -192,10 +184,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 30),
-
-                    // SEARCH & FILTER CARD
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       padding: const EdgeInsets.all(24),
@@ -212,7 +201,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
                       ),
                       child: Column(
                         children: [
-                          // Baris Search
                           Row(
                             children: [
                               Expanded(
@@ -279,10 +267,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 16),
-
-                          // Tombol Filter Lanjutan (Centered)
                           Center(
                             child: InkWell(
                               onTap: () {
@@ -333,8 +318,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               ),
                             ),
                           ),
-
-                          // Form Filter (Expandable)
                           if (_isFilterExpanded) ...[
                             const SizedBox(height: 24),
                             _buildFilterDropdown("Rombel", "Semua Rombel", [
@@ -360,7 +343,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               "BDP",
                             ]),
                             const SizedBox(height: 24),
-
                             SizedBox(
                               width: double.infinity,
                               height: 44,
@@ -374,7 +356,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                                 ),
                                 onPressed: () {
                                   setState(() => _isFilterExpanded = false);
-                                  _handleSearch(); 
+                                  _handleSearch();
                                 },
                                 child: Text(
                                   "Terapkan Filter",
@@ -421,9 +403,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 ),
               ],
             ),
-
-            const SizedBox(height: 30), // Jarak antara card dan list siswa
-            // Text "Menampilkan..."
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Align(
@@ -440,10 +420,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
-
-            // List Siswa
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -453,12 +430,8 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 return StudentCard(student: currentData[index]);
               },
             ),
-
-            // Pagination Controls
             if (_filteredStudents.isNotEmpty)
               _buildPaginationControls(totalPages),
-
-            // Footer
             _buildFooter(),
           ],
         ),
@@ -466,7 +439,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
     );
   }
 
-  // Widget Helper untuk Dropdown Filter
   Widget _buildFilterDropdown(String label, String hint, List<String> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -551,10 +523,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 fixedSize: const Size.fromHeight(36),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ExplorePage1()),
-                );
+                Navigator.pushNamed(context, '/login');
               },
               child: const Text(
                 "Login",
@@ -664,7 +633,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
   }
 }
 
-// --- Student Card Widget ---
 class StudentCard extends StatelessWidget {
   final Student student;
 

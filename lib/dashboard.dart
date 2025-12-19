@@ -1,33 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slicing_jurnalku/widgets/navbar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  bool _isSidebarVisible = false;
+
+  void _toggleSidebar() {
+    setState(() {
+      _isSidebarVisible = !_isSidebarVisible;
+    });
+  }
+
+  void _navigateToAndClose(String routeName) {
+    if (_isSidebarVisible) {
+      _toggleSidebar();
+    }
+    Navigator.pushReplacementNamed(context, routeName);
+  }
+
+  void _handleLogOut() {
+    if (_isSidebarVisible) {
+      _toggleSidebar();
+    }
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // PERUBAHAN: Pindahkan dari drawer ke endDrawer
-      endDrawer: const NavbarPage(),
       backgroundColor: Colors.grey[100],
-      body: Column(
+
+      body: Stack(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const _Header(),
-                  const _HeroSection(),
-                  const SizedBox(height: 32),
-                  const _ResponsiveContent(),
-                  const SizedBox(height: 40),
-                  buildFooter(),
-                ],
+          Column(
+            children: [
+              _Header(onTapProfile: _toggleSidebar),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _HeroSection(),
+                      const SizedBox(height: 32),
+                      const _ResponsiveContent(),
+                      const SizedBox(height: 40),
+                      const _MenuSection(),
+                      const SizedBox(height: 40),
+                      _StatisticsSection(
+                        isMobile: MediaQuery.of(context).size.width < 900,
+                      ),
+                      const SizedBox(height: 80),
+                      buildFooter(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          if (_isSidebarVisible)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: _toggleSidebar,
+                child: Container(color: Colors.black.withOpacity(0.3)),
               ),
             ),
-          ),
+
+          if (_isSidebarVisible)
+            NavbarPage(
+              onClose: _toggleSidebar,
+              onNavigate: _navigateToAndClose,
+              onLogOut: _handleLogOut,
+            ),
         ],
       ),
     );
@@ -35,70 +88,78 @@ class DashboardPage extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  final VoidCallback onTapProfile;
+
+  const _Header({required this.onTapProfile});
 
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = MediaQuery.of(context).size.width > 900;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(bottom: BorderSide(color: Color(0xFFE0E0E0))),
       ),
-      child: Row(
-        children: [
-          const Icon(Icons.home_outlined, size: 28),
+      child: SafeArea(
+        bottom: false,
+        child: Row(
+          children: [
+            const Icon(Icons.home_outlined, size: 28, color: Colors.grey),
 
-          if (isDesktop) ...[
-            const SizedBox(width: 8),
-            const Icon(Icons.chevron_right, size: 20, color: Colors.black54),
-            const SizedBox(width: 8),
-            const Text(
-              "Dashboard",
-              style: TextStyle(fontSize: 16, color: Colors.black),
+            if (isDesktop) ...[
+              const SizedBox(width: 8),
+              const Icon(Icons.chevron_right, size: 20, color: Colors.black54),
+              const SizedBox(width: 8),
+              const Text(
+                "Dashboard",
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ],
+
+            const Spacer(),
+
+            GestureDetector(
+              onTap: onTapProfile,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: const [
+                        Text(
+                          "Shapira Bunga Aulia",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          "PPLG XII-5",
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.asset(
+                      'assets/images/pic1.jpeg',
+                      width: 44,
+                      height: 44,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-
-          const Spacer(),
-
-          GestureDetector(
-            onTap: () {
-              Scaffold.of(context).openEndDrawer();
-            },
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: const [
-                    Text(
-                      "Ahmad Syakarudin",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      "PPLG XII-5",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    "assets/images/pp-dummy.jpg",
-                    width: 44,
-                    height: 44,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -344,6 +405,12 @@ class _MenuSection extends StatelessWidget {
       "title": "Sertifikat",
       "subtitle": "Lihat dan unduh sertifikat kompetensimu di sini.",
       "target": "/certificate",
+    },
+    {
+      "icon": Icons.search,
+      "title": "Direktori Siswa",
+      "subtitle": "Lihat daftar dan profil siswa.",
+      "target": "/explore-private",
     },
   ];
 

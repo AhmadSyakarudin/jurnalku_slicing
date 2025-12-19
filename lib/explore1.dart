@@ -47,7 +47,6 @@ class Student {
   });
 }
 
-// --- Main Page ---
 class DirectoryPage extends StatefulWidget {
   const DirectoryPage({super.key});
 
@@ -60,13 +59,11 @@ class _DirectoryPageState extends State<DirectoryPage> {
   int _currentPage = 1;
   final TextEditingController _searchController = TextEditingController();
 
-  // State untuk Filter
   bool _isFilterExpanded = false;
   String? _selectedRombel;
   String? _selectedRayon;
   String? _selectedJurusan;
 
-  // Data Dummy
   final List<Student> _allStudents = List.generate(20, (index) {
     return Student(
       name: index % 2 == 0 ? "Abdee Munzie Alazkha" : "Achmad Arya Djayadilaga",
@@ -104,7 +101,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Pagination Logic
     final int startIndex = (_currentPage - 1) * _itemsPerPage;
     final int endIndex = (startIndex + _itemsPerPage < _filteredStudents.length)
         ? startIndex + _itemsPerPage
@@ -125,9 +121,8 @@ class _DirectoryPageState extends State<DirectoryPage> {
           children: [
             Stack(
               children: [
-                // 1. Background Biru (Fixed Height)
                 Container(
-                  height: 250, // Tinggi background biru
+                  height: 250,
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -148,12 +143,9 @@ class _DirectoryPageState extends State<DirectoryPage> {
                     ),
                   ),
                 ),
-
-                // 2. Konten Header & Card
                 Column(
                   children: [
                     const SizedBox(height: 30),
-                    // Judul Header
                     Center(
                       child: Column(
                         children: [
@@ -192,10 +184,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 30),
-
-                    // SEARCH & FILTER CARD
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       padding: const EdgeInsets.all(24),
@@ -212,7 +201,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
                       ),
                       child: Column(
                         children: [
-                          // Baris Search
                           Row(
                             children: [
                               Expanded(
@@ -279,10 +267,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 16),
-
-                          // Tombol Filter Lanjutan (Centered)
                           Center(
                             child: InkWell(
                               onTap: () {
@@ -333,8 +318,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               ),
                             ),
                           ),
-
-                          // Form Filter (Expandable)
                           if (_isFilterExpanded) ...[
                             const SizedBox(height: 24),
                             _buildFilterDropdown("Rombel", "Semua Rombel", [
@@ -360,8 +343,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
                               "BDP",
                             ]),
                             const SizedBox(height: 24),
-
-                            // Tombol Aksi Filter
                             SizedBox(
                               width: double.infinity,
                               height: 44,
@@ -375,7 +356,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                                 ),
                                 onPressed: () {
                                   setState(() => _isFilterExpanded = false);
-                                  _handleSearch(); // Placeholder action
+                                  _handleSearch();
                                 },
                                 child: Text(
                                   "Terapkan Filter",
@@ -422,9 +403,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 ),
               ],
             ),
-
-            const SizedBox(height: 30), // Jarak antara card dan list siswa
-            // Text "Menampilkan..."
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Align(
@@ -441,10 +420,7 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 ),
               ),
             ),
-
             const SizedBox(height: 12),
-
-            // List Siswa
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -454,12 +430,8 @@ class _DirectoryPageState extends State<DirectoryPage> {
                 return StudentCard(student: currentData[index]);
               },
             ),
-
-            // Pagination Controls
             if (_filteredStudents.isNotEmpty)
               _buildPaginationControls(totalPages),
-
-            // Footer
             _buildFooter(),
           ],
         ),
@@ -467,7 +439,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
     );
   }
 
-  // Widget Helper untuk Dropdown Filter
   Widget _buildFilterDropdown(String label, String hint, List<String> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -554,7 +525,9 @@ class _DirectoryPageState extends State<DirectoryPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const DashboardPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const DashboardPage(),
+                  ),
                 );
               },
               child: const Text(
@@ -665,7 +638,6 @@ class _DirectoryPageState extends State<DirectoryPage> {
   }
 }
 
-// --- Student Card Widget ---
 class StudentCard extends StatelessWidget {
   final Student student;
 

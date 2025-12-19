@@ -1,213 +1,257 @@
 import 'package:flutter/material.dart';
 import 'package:slicing_jurnalku/widgets/navbar.dart';
 
-class ProgressPage extends StatelessWidget {
+class ProgressPage extends StatefulWidget {
   const ProgressPage({super.key});
+
+  @override
+  State<ProgressPage> createState() => _ProgressPageState();
+}
+
+class _ProgressPageState extends State<ProgressPage> {
+  bool _isSidebarVisible = false;
+
+  void _toggleSidebar() {
+    setState(() {
+      _isSidebarVisible = !_isSidebarVisible;
+    });
+  }
+
+  void _navigateToAndClose(String routeName) {
+    if (_isSidebarVisible) {
+      _toggleSidebar();
+    }
+    Navigator.pushReplacementNamed(context, routeName);
+  }
+
+  void _handleLogOut() {
+    if (_isSidebarVisible) {
+      _toggleSidebar();
+    }
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const NavbarPage(),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12.0,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey.shade200, width: 1.0),
-                ),
-              ),
-              child: Builder(
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () {
-                      // Buka drawer dari kanan
-                      Scaffold.of(context).openEndDrawer();
-                    },
-                    child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.home_outlined, size: 28, color: Colors.grey),
-                      const Spacer(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(context),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Fadel Muhammad Rasyid",
+                            "Progress Belajar",
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: Colors.black87,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                              letterSpacing: -0.5,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 8),
                           Text(
-                            "PPLG XII-5",
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            "Pantau perkembangan kompetensi dan materi \npembelajaran Anda",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                              height: 1.4,
+                            ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(width: 12),
-                      CircleAvatar(
-                        radius: 22,
-                        backgroundColor: Colors.grey[200],
-                        backgroundImage: const AssetImage("assets/img/pp.png"),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey.shade300),
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 10.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEFF6FF),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              "Tuesday, 2 December 2025",
+                              style: TextStyle(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  );
-                }
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Progress Belajar",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Pantau perkembangan kompetensi dan materi \npembelajaran Anda",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                          height: 1.4,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 10.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEFF6FF),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "Tuesday, 2 December 2025",
-                          style: TextStyle(
-                            color: Colors.blue[700],
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                          const SizedBox(height: 24),
+                          _buildStatCard(
+                            title: "Total Pengajuan",
+                            value: "2",
+                            statusText: "Semua status",
+                            statusColor: Colors.blue,
+                            icon: Icons.check_circle_outline,
+                            iconColor: Colors.blue,
+                            iconBgColor: Colors.blue.shade50,
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      _buildStatCard(
-                        title: "Total Pengajuan",
-                        value: "2",
-                        statusText: "Semua status",
-                        statusColor: Colors.blue,
-                        icon: Icons.check_circle_outline,
-                        iconColor: Colors.blue,
-                        iconBgColor: Colors.blue.shade50,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildStatCard(
-                        title: "Halaman Ini",
-                        value: "0",
-                        statusText: "Data ditampilkan",
-                        statusColor: Colors.green,
-                        icon: Icons.calendar_today_outlined,
-                        iconColor: Colors.green,
-                        iconBgColor: Colors.green.shade50,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildStatCard(
-                        title: "Status Pending",
-                        value: "0",
-                        statusText: "Perlu validasi",
-                        statusColor: Colors.orange,
-                        icon: Icons.access_time,
-                        iconColor: Colors.orange,
-                        iconBgColor: Colors.orange.shade50,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildStatCard(
-                        title: "Total Halaman",
-                        value: "1",
-                        statusText: "Navigasi tersedia",
-                        statusColor: Colors.purple,
-                        icon: Icons.emoji_events_outlined,
-                        iconColor: Colors.purple,
-                        iconBgColor: Colors.purple.shade50,
-                      ),
-                      const SizedBox(height: 30),
-                      _buildProjectCard(
-                        title: "Project Work",
-                        subtitle: "Kompetensi dan materi pembelajaran",
-                        items: [
-                          _ProjectData(
-                            title: "Pemrograman Dasar",
-                            kompetensi: "Logika dan Algoritma Dasar",
-                            guru: "Pak Budi",
-                            date: "02 Des 2025",
-                            status: "Pending",
-                            statusColor: Colors.orange,
-                            noteGuru: "Revisi bab 1 bagian algoritma flow.",
-                            noteSiswa: "Sudah diperbaiki pak.",
-                          ),
-                          _ProjectData(
-                            title: "Desain UI/UX",
-                            kompetensi: "Prototyping Figma",
-                            guru: "Bu Siti",
-                            date: "01 Des 2025",
-                            status: "Selesai",
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: "Halaman Ini",
+                            value: "0",
+                            statusText: "Data ditampilkan",
                             statusColor: Colors.green,
-                            noteGuru: "Sangat bagus, pertahankan.",
-                            noteSiswa: "-",
+                            icon: Icons.calendar_today_outlined,
+                            iconColor: Colors.green,
+                            iconBgColor: Colors.green.shade50,
                           ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: "Status Pending",
+                            value: "0",
+                            statusText: "Perlu validasi",
+                            statusColor: Colors.orange,
+                            icon: Icons.access_time,
+                            iconColor: Colors.orange,
+                            iconBgColor: Colors.orange.shade50,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildStatCard(
+                            title: "Total Halaman",
+                            value: "1",
+                            statusText: "Navigasi tersedia",
+                            statusColor: Colors.purple,
+                            icon: Icons.emoji_events_outlined,
+                            iconColor: Colors.purple,
+                            iconBgColor: Colors.purple.shade50,
+                          ),
+                          const SizedBox(height: 30),
+                          _buildProjectCard(
+                            title: "Project Work",
+                            subtitle: "Kompetensi dan materi pembelajaran",
+                            items: [
+                              _ProjectData(
+                                title: "Pemrograman Dasar",
+                                kompetensi: "Logika dan Algoritma Dasar",
+                                guru: "Pak Budi",
+                                date: "02 Des 2025",
+                                status: "Pending",
+                                statusColor: Colors.orange,
+                                noteGuru: "Revisi bab 1 bagian algoritma flow.",
+                                noteSiswa: "Sudah diperbaiki pak.",
+                              ),
+                              _ProjectData(
+                                title: "Desain UI/UX",
+                                kompetensi: "Prototyping Figma",
+                                guru: "Bu Siti",
+                                date: "01 Des 2025",
+                                status: "Selesai",
+                                statusColor: Colors.green,
+                                noteGuru: "Sangat bagus, pertahankan.",
+                                noteSiswa: "-",
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          _buildProjectCard(
+                            title: "Mobile Apps",
+                            subtitle: "Kompetensi dan materi pembelajaran",
+                            items: [],
+                          ),
+                          const SizedBox(height: 16),
+                          _buildProjectCard(
+                            title: "UKK (Uji Kompetensi Keahlian)",
+                            subtitle: "Kompetensi dan materi pembelajaran",
+                            items: [],
+                          ),
+                          const SizedBox(height: 16),
+                          _buildProjectCard(
+                            title: "GIM",
+                            subtitle: "Kompetensi dan materi pembelajaran",
+                            items: [],
+                          ),
+                          const SizedBox(height: 40),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      _buildProjectCard(
-                        title: "Mobile Apps",
-                        subtitle: "Kompetensi dan materi pembelajaran",
-                        items: [],
-                      ),
-                      const SizedBox(height: 16),
-                      _buildProjectCard(
-                        title: "UKK (Uji Kompetensi Keahlian)",
-                        subtitle: "Kompetensi dan materi pembelajaran",
-                        items: [],
-                      ),
-                      const SizedBox(height: 16),
-                      _buildProjectCard(
-                        title: "GIM",
-                        subtitle: "Kompetensi dan materi pembelajaran",
-                        items: [],
-                      ),
-                      const SizedBox(height: 40),
-                    ],
+                    ),
                   ),
                 ),
+              ],
+            ),
+          ),
+          if (_isSidebarVisible)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: _toggleSidebar,
+                child: Container(color: Colors.black.withOpacity(0.3)),
               ),
             ),
-          ],
+          if (_isSidebarVisible)
+            NavbarPage(
+              onClose: _toggleSidebar,
+              onNavigate: _navigateToAndClose,
+              onLogOut: _handleLogOut,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(color: Colors.grey.shade200, width: 1.0),
         ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.home_outlined, size: 28),
+            onPressed: () => Navigator.pop(context),
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: _toggleSidebar,
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      "Shapira Bunga Aulia",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "PPLG XII-5",
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 12),
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.grey[200],
+                  backgroundImage: const AssetImage("assets/images/pic1.jpeg"),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

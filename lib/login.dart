@@ -12,7 +12,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool obscurePass = true;
 
-  // Helper widget untuk membuat Icon Box agar kode lebih rapi
   Widget _buildIconBox(IconData icon, Color bgColor, Color iconColor) {
     return Container(
       padding: const EdgeInsets.all(10),
@@ -28,25 +27,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        // Menggunakan Stack untuk menumpuk konten dan tombol mengambang
         child: Stack(
           children: [
             SingleChildScrollView(
               child: Column(
                 children: [
-                  // HEADER IMAGE
                   SizedBox(
                     height: 120,
                     width: double.infinity,
                     child: Image.asset(
                       "img/background.jpg",
                       fit: BoxFit.cover,
-                      // Placeholder untuk error jika gambar tidak ditemukan
                       errorBuilder: (context, error, stackTrace) =>
                           Container(color: Colors.grey),
                     ),
                   ),
-
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
@@ -72,8 +67,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 20),
-
-                        // USERNAME
                         TextField(
                           decoration: InputDecoration(
                             labelText: "Username atau NIS",
@@ -91,8 +84,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
-                        // PASSWORD
                         TextField(
                           obscureText: obscurePass,
                           decoration: InputDecoration(
@@ -124,8 +115,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 25),
-
-                        // TOMBOL MASUK
                         SizedBox(
                           width: double.infinity,
                           height: 50,
@@ -155,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
                         const Center(
                           child: Text(
                             "Lupa password? Hubungi guru laboran.",
@@ -163,8 +151,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 30),
-
-                        // JUDUL TENGAH
                         const Center(
                           child: Text(
                             "Menyatukan Upaya untuk Kemajuan Siswa",
@@ -176,7 +162,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-
                         const Center(
                           child: Text(
                             "Jurnalku adalah aplikasi cerdas yang membantu guru dan siswa "
@@ -186,10 +171,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 25),
-
-                        // === CARD INFORMASI ===
-
-                        // Card 1: Dirancang untuk Sekolah (Icon Gedung - Kuning)
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -198,11 +179,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Row(
                             children: [
-                              // Icon Box
                               _buildIconBox(
-                                Icons.domain, // Icon Gedung
-                                Colors.amber.shade100, // Background Kuning
-                                Colors.amber.shade900, // Icon Coklat/Orange tua
+                                Icons.domain,
+                                Colors.amber.shade100,
+                                Colors.amber.shade900,
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -228,8 +208,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
-                        // Card 2: Pemantauan Terstruktur (Icon Diagram - Ungu)
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -239,9 +217,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             children: [
                               _buildIconBox(
-                                Icons.account_tree_outlined, // Icon Struktur
-                                Colors.purple.shade100, // Background Ungu Muda
-                                Colors.purple, // Icon Ungu
+                                Icons.account_tree_outlined,
+                                Colors.purple.shade100,
+                                Colors.purple,
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -267,8 +245,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
-                        // Card 3: Fitur Praktis (Icon Yoga/Meditasi - Biru)
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -278,9 +254,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             children: [
                               _buildIconBox(
-                                Icons.self_improvement, // Icon Yoga
-                                Colors.blue.shade100, // Background Biru Muda
-                                Colors.blue.shade700, // Icon Biru
+                                Icons.self_improvement,
+                                Colors.blue.shade100,
+                                Colors.blue.shade700,
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -306,8 +282,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
-                        // Card 4: Pengajuan Kompetensi (Icon Toga - Orange)
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -317,11 +291,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             children: [
                               _buildIconBox(
-                                Icons.school, // Icon Toga Wisuda
-                                Colors
-                                    .deepOrange
-                                    .shade100, // Background Orange Muda
-                                Colors.deepOrange, // Icon Orange
+                                Icons.school,
+                                Colors.deepOrange.shade100,
+                                Colors.deepOrange,
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -347,8 +319,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
-                        // Card 5: Validasi Guru (Icon Kertas/Pena - Hijau)
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -358,9 +328,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             children: [
                               _buildIconBox(
-                                Icons.edit_document, // Icon Dokumen Edit
-                                Colors.green.shade100, // Background Hijau Muda
-                                Colors.green.shade700, // Icon Hijau
+                                Icons.edit_document,
+                                Colors.green.shade100,
+                                Colors.green.shade700,
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -386,8 +356,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 15),
-
-                        // Card 6: Pantauan Real-Time (Icon Monitor - Pink)
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -397,9 +365,9 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             children: [
                               _buildIconBox(
-                                Icons.desktop_windows, // Icon Monitor
-                                Colors.pink.shade100, // Background Pink Muda
-                                Colors.pink.shade700, // Icon Pink
+                                Icons.desktop_windows,
+                                Colors.pink.shade100,
+                                Colors.pink.shade700,
                               ),
                               const SizedBox(width: 15),
                               Expanded(
@@ -424,7 +392,6 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
-                        // Tambahkan padding di bagian bawah agar tombol floating tidak menutupi konten
                         const SizedBox(height: 100),
                       ],
                     ),
@@ -432,17 +399,13 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            // Posisi tombol di kanan bawah
             Positioned(
               bottom: 20,
               right: 20,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(
-                    0xff0A3F88,
-                  ), // Warna latar tombol
-                  foregroundColor:
-                      Colors.white, // Warna teks dan icon otomatis putih
+                  backgroundColor: const Color(0xff0A3F88),
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 22,
                     vertical: 12,
@@ -453,11 +416,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 onPressed: () {
-                  // Navigasi ke ExplorePage
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ExplorePage(),
+                      builder: (context) => const DirectoryPage(),
                     ),
                   );
                 },
